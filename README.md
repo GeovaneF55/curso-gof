@@ -5,7 +5,6 @@
 - define a solução
 - quando aplicar esta solução
 - consequências
-- [https://github.com/eimg/design-patterns-php](https://github.com/eimg/design-patterns-php)
 
 ## Padrões de Criação ("criacionais") - 5
 
