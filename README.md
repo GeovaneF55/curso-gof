@@ -16,7 +16,7 @@
 
 - Intenção: Garantir que uma determinada classe tenha uma, e somente uma instância, mantendo um ponto global de acesso para a mesma
 
-![singleton.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/58b15b0e-1748-4f74-aa85-91e78f614a75/singleton.png)
+![singleton.png](https://www.dofactory.com/img/diagrams/net/Singleton.png)
 
 ```php
 <?php
@@ -56,7 +56,7 @@ echo $single->info;
 - Intenção: definir uma interface para criar um objeto, mas deixar as subclasses decidirem que classe instanciar.
 - cria uma instância de várias classes derivadas.
 
-![factory_method.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/fc3dde3a-e351-4565-812b-7ab23f42ba2f/factory_method.png)
+![factory_method.png](https://www.dofactory.com/img/diagrams/net/factory.png)
 
 ```php
 <?php
@@ -120,14 +120,102 @@ echo $car->info();
 - Intenção: fornecer uma interface para criação de famílias de objetos relacionados ou dependentes sem especificar suas classes concretas
 - cria uma instância de várias famílias de classes
 
-![Abstract_Factory.svg](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/954796d5-4d2c-43db-9da9-dd85b9ec6133/Abstract_Factory.svg)
+![Abstract_Factory.svg](https://www.dofactory.com/img/diagrams/net/abstract.png)
+
+```php
+<?php
+
+class CarOptions
+{
+    var $color = "White";
+    var $doors = 4;
+}
+
+class Car
+{
+    private $color;
+    private $doors;
+
+    public function __construct(CarOptions $options)
+    {
+        $this->color = $options->color;
+        $this->doors = $options->doors;
+    }
+
+    public function info()
+    {
+        return "This is a $this->doors doors $this->color car.\n";
+    }
+}
+
+// === Abstract/Guideline to creat CarFactory ===
+// This help use create interchangable factories
+// See also: Factory Method pattern
+abstract class CarFactory
+{
+    abstract public function build();
+}
+
+class RedCarFactory extends CarFactory
+{
+    private $options;
+
+    public function __construct($doors)
+    {
+        $options = new CarOptions();
+        $options->color = "Red";
+        $options->doors = $doors;
+
+        $this->options = $options;
+    }
+
+    public function build()
+    {
+        return new Car($this->options);
+    }
+}
+
+class BlueCarFactory extends CarFactory
+{
+    private $options;
+
+    public function __construct($doors)
+    {
+        $options = new CarOptions();
+        $options->color = "Blue";
+        $options->doors = $doors;
+
+        $this->options = $options;
+    }
+
+    public function build()
+    {
+        return new Car($this->options);
+    }
+}
+
+// ---
+
+$color = "Blue";
+
+// Deciding which factory to use
+if($color == "Blue") {
+    $factory = new BlueCarFactory(5);
+} elseif($color == "Red") {
+    $factory = new RedCarFactory(4);
+}
+
+$car = $factory->build();
+echo $car->info();
+// Output: This is a 5 doors Blue car.
+```
 
 ### 4 - Builder
 
 - Intenção: separar a construção de um objeto complexo da sua representação de modo que o mesmo processo de construção possa criar diferentes representações
 - separa a construção do objeto de sua representação
 
-![Builder.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/33448bff-9727-45e3-8dca-5ff42495ffcd/Builder.png)
+![Builder.png](https://www.dofactory.com/img/diagrams/net/builder.png)
 
 ```php
 <?php
@@ -198,7 +286,7 @@ print_r($car);
 - Instância: especificar os tipos de objetos a serem criados usando uma instância protótipo e criar novos objetos pela cópia deste protótipo
 - Uma instância inicializada a ser copiada ou clonada
 
-![Prototype.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6ad28c72-9f7c-4edc-bd2b-9df8e8699039/Prototype.png)
+![Prototype.png](https://www.dofactory.com/img/diagrams/net/prototype.png)
 
 ```php
 <?php
@@ -238,7 +326,7 @@ print_r($car2);
 - Intenção: desacoplar uma abstração da sua implementação, de modo que as duas possam variar independentemente
 - separa a interface do objeto de sua implementação
 
-![Bridge.svg](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f6e03992-2929-4cc7-b8de-e3ac8bd32374/Bridge.svg)
+![Bridge.svg](https://www.dofactory.com/img/diagrams/net/bridge.png)
 
 ```php
 <?php
@@ -303,7 +391,7 @@ $bridge->engine->run();
 - Intenção: converter a interface de uma classe em outra interface, esperada pelos clientes. Permite que classes com interfaces incompatíveis trabalhem em conjunto o que, de outra forma, seria impossível
 - Equiparar interfaces de diferentes classes.
 
-![Adapter.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/17e34441-e94b-44f9-b822-221b039c0f93/Adapter.png)
+![Adapter.png](https://www.dofactory.com/img/diagrams/net/adapter.png)
 
 ```php
 <?php
@@ -420,7 +508,7 @@ $lamp2->turnOn();
 - Intenção: fornece um substituto ou marcador da localização de outro objeto para controlar o acesso ao mesmo
 - Um objeto representando um objeto
 
-![proxy.gif](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/e58b0ea1-6165-43d4-bb56-bec868c0344e/proxy.gif)
+![proxy.gif](https://www.dofactory.com/img/diagrams/net/proxy.png)
 
 ```php
 <?php
@@ -462,7 +550,7 @@ $cars[1]->start();
 
 - Intenção: agregar dinamicamente responsabilidades adicionais a um objeto
 
-![decorator.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d82b12e2-7e96-4e9a-97d5-30a034a092b3/decorator.png)
+![decorator.png](https://www.dofactory.com/img/diagrams/net/decorator.png)
 
 ```php
 <?php
@@ -533,7 +621,7 @@ echo $car->features;
 
 - Intenção: compor objetos em estruturas de árvore para representarem hierarquias todo-parte
 
-![composite.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/516299f2-289b-4bcf-806b-63a90a488737/composite.png)
+![composite.png](https://www.dofactory.com/img/diagrams/net/composite.png)
 
 ```php
 <?php
@@ -600,7 +688,7 @@ $list->honk();
 - Intenção: fornecer uma interface unificada para um conjunto de interfaces em um subsistema. Define uma interface de nível mais alto que torna o subsistema mais fácil de ser usado
 - Uma única classe representa um subsistema inteiro
 
-![facade.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9c2b4058-ae3e-4fae-860d-13422d33914d/facade.png)
+![facade.png](https://www.dofactory.com/img/diagrams/net/facade.png)
 
 ```php
 <?php
@@ -671,7 +759,7 @@ $car->start();
 
 - Intenção: usar compartilhamento para suportar eficientemente grande quantidades de objetos de granularidade fina
 
-![flyweight.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c2cbe5c3-124a-460a-9202-1745e0b8d843/flyweight.png)
+![flyweight.png](https://www.dofactory.com/img/diagrams/net/flyweight.png)
 
 ```php
 <?php
@@ -721,7 +809,7 @@ echo $fit->name;
 - Intenção: encapsular uma solicitação como um objeto, desta forma permitindo parametrizar clientes com diferente solicitações, enfileirar ou fazer o registro (log) de solicitações e suportar operações que podem ser desfeitas.
 - Encapsular comandos como um objeto
 
-![command.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/51cbcb49-a05e-405c-aa03-4684dc80615d/command.png)
+![command.png](https://www.dofactory.com/img/diagrams/net/command.png)
 
 ```php
 <?php
@@ -808,7 +896,7 @@ $commands->add($down);
 - Intenção: definir uma família de algoritmos, encapsular cada uma delas e torná-las intercambiáveis. Permite que o algoritmo varie independentemente dos clientes que o utilizam.
 - Encapsular algoritmos ("estratégias") como um objeto.
 
-![strategy.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/70ee4a84-fce2-4da3-80be-0c3ca257d904/strategy.png)
+![strategy.png](https://www.dofactory.com/img/diagrams/net/strategy.png)
 
 ```php
 <?php
@@ -875,7 +963,7 @@ $carpicker->pick();
 - Intenção: permite a um objeto alterar seu comportamento quando o seu estado interno muda. O objeto parecerá ter mudado sua classe.
 - Alterar o comportamento de um objeto quando seu estado muda.
 
-![state.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3ce3e8b9-cbfa-4af6-ac4a-b660935737ac/state.png)
+![state.png](https://www.dofactory.com/img/diagrams/net/state.png)
 
 ```php
 <?php
@@ -972,7 +1060,7 @@ $car->stop();
 
 - Intenção: definir uma dependência um-para-muitos entre objetos, de maneira que quando um objeto muda de estado todos os seus dependentes são notificados e atualizados automaticamente.
 
-![observer.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/14b20a0d-3cae-4925-b747-5df8bde2cd8a/observer.png)
+![observer.png](https://www.dofactory.com/img/diagrams/net/observer.png)
 
 ```php
 <?php
@@ -1047,7 +1135,7 @@ $car->setStatus("driving");
 - Intenção: definir um objeto que encapsula a forma como um conjunto de objetos interage. Promove o acoplamento fraco ao evitar que os objetos se refiram uns aos outros explicitamente e permite variar suas interações independentemente.
 - Definir uma comunicação simplificada entre as classes
 
-![mediator.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0656e430-e1a3-4917-bb3c-ec65752e4ebb/mediator.png)
+![mediator.png](https://www.dofactory.com/img/diagrams/net/mediator.png)
 
 ```php
 <?php
@@ -1110,7 +1198,7 @@ $car->check();
 - Intenção: evitar o acoplamento do remetente de uma solicitação ao seu receptor, ao dar a mais de um objeto a oportunidade de tratar a solicitação. Encadear os objetos receptores, passando a solicitação ao longo da cadeia até que um objeto a trate.
 - Uma maneira de passar uma requisição entre uma cadeia de objetos.
 
-![chain.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d2de50c7-2d49-4621-999a-0fad0c2c290b/chain.png)
+![chain.png](https://www.dofactory.com/img/diagrams/net/chain.png)
 
 ```php
 <?php
@@ -1213,7 +1301,7 @@ $oil->check(new Car());
 
 - Intenção: definir o esqueleto de um algoritmo em uma operação, postergando alguns passos para subclasses. Permite que subclasses redefinam certos passos de um algoritmo sem mudar a estrutura do mesmo.
 
-![template.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/842a95d2-78fa-41c1-85c8-5532648cdc95/template.png)
+![template.png](https://www.dofactory.com/img/diagrams/net/template.png)
 
 ```php
 <?php
@@ -1273,7 +1361,7 @@ $evo->loadPassenger();
 - Uma forma de incluir elementos da linguagem em um programa.
 - Usa classes para representar cada regra de uma gramática.
 
-![interpreter.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/026d5bc1-26ab-41af-9b57-754b432db32d/interpreter.png)
+![interpreter.png](https://www.dofactory.com/img/diagrams/net/interpreter.png)
 
 ```php
 <?php
@@ -1348,7 +1436,7 @@ $mpg2kml->show();
 
 - Intenção: Sem violar o encapsulamento, capturar e externalizar um estado interno de um objeto, de maneira que o objeto possa ser restaurado para este estado mais tarde.
 
-![memento.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/522991e2-d3f9-473f-bff0-d6508ea7f917/memento.png)
+![memento.png](https://www.dofactory.com/img/diagrams/net/memento.png)
 
 ```php
 <?php
@@ -1433,7 +1521,7 @@ echo $custom->getColor() . "\n";
 
 - Intenção: fornecer um meio de acessar, sequencialmente, os elementos de um objeto agregado sem expor a sua representação.
 
-![iterator.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7b160b39-7323-4590-b93c-3242ff50464c/iterator.png)
+![iterator.png](https://www.dofactory.com/img/diagrams/net/iterator.png)
 
 ```php
 <?php
@@ -1532,7 +1620,7 @@ foreach($cars as $car){
 - Intenção: representar uma operação a ser executada nos elementos de uma estrutura de objetos. Permite definir uma nova operação sem mudar as classes dos elementos entre os quais opera.
 - Define uma nova operação a uma classe sem alterá-la.
 
-![visitor.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/91ac2621-8e76-4836-a6ff-0dfb7ebecb44/visitor.png)
+![visitor.png](https://www.dofactory.com/img/diagrams/net/visitor.png)
 
 ```php
 <?php
