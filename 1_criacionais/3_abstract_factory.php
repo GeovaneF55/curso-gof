@@ -2,53 +2,84 @@
 
 class CarOptions
 {
-  var $color = "White";
-  var $doors = 4;
+    var $color = "White";
+    var $doors = 4;
 }
 
 class Car
 {
-  private $color;
-  private $doors;
+    private $color;
+    private $doors;
 
-  public function __construct(CarOptions $options)
-  {
-    $this->color = $options->color;
-    $this->doors = $options->doors;
-  }
+    public function __construct(CarOptions $options)
+    {
+        $this->color = $options->color;
+        $this->doors = $options->doors;
+    }
 
-  public function info()
-  {
-    return "This is a $this->doors doors $this->color car.\n";
-  }
+    public function info()
+    {
+        return "This is a $this->doors doors $this->color car.\n";
+    }
 }
 
-// === CarFactory that create Car object for us ===
-// We can create Car object directly using Car class
-// But, by using this factory, we can skip the detail
-class CarFactory
+// === Abstract/Guideline to creat CarFactory ===
+// This help use create interchangable factories
+// See also: Factory Method pattern
+abstract class CarFactory
 {
-  private $options;
+    abstract public function build();
+}
 
-  public function __construct($color, $doors)
-  {
-    $options = new CarOptions();
-    $options->color = $color;
-    $options->doors = $doors;
+class RedCarFactory extends CarFactory
+{
+    private $options;
 
-    $this->options = $options;
-  }
+    public function __construct($doors)
+    {
+        $options = new CarOptions();
+        $options->color = "Red";
+        $options->doors = $doors;
 
-  public function build()
-  {
-    return new Car($this->options);
-  }
+        $this->options = $options;
+    }
+
+    public function build()
+    {
+        return new Car($this->options);
+    }
+}
+
+class BlueCarFactory extends CarFactory
+{
+    private $options;
+
+    public function __construct($doors)
+    {
+        $options = new CarOptions();
+        $options->color = "Blue";
+        $options->doors = $doors;
+
+        $this->options = $options;
+    }
+
+    public function build()
+    {
+        return new Car($this->options);
+    }
 }
 
 // ---
 
-$factory = new CarFactory("Red", 2);
-$car = $factory->build();
+$color = "Blue";
 
+// Deciding which factory to use
+if($color == "Blue") {
+    $factory = new BlueCarFactory(5);
+} elseif($color == "Red") {
+    $factory = new RedCarFactory(4);
+}
+
+$car = $factory->build();
 echo $car->info();
-// Output: This is a 2 doors Red car.
+// Output: This is a 5 doors Blue car.
